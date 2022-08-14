@@ -123,7 +123,7 @@ Prefab:
     - target: {fileID: 114848120511536268, guid: 8814ea52310d2614a9feda02ec355ae4,
         type: 2}
       propertyPath: AudioClips.Array.size
-      value: 13
+      value: 15
       objectReference: {fileID: 0}
     - target: {fileID: 439642, guid: 8814ea52310d2614a9feda02ec355ae4, type: 2}
       propertyPath: m_LocalPosition.x
@@ -243,12 +243,12 @@ Prefab:
         type: 2}
       propertyPath: AudioClips.Array.data[13]
       value: 
-      objectReference: {fileID: 8300000, guid: 73db76ab2b8a34649ad8998dcdef7019, type: 3}
+      objectReference: {fileID: 8300000, guid: 619aae8f38a0e3348ba956a7d99de2f0, type: 3}
     - target: {fileID: 114848120511536268, guid: 8814ea52310d2614a9feda02ec355ae4,
         type: 2}
       propertyPath: AudioClips.Array.data[14]
       value: 
-      objectReference: {fileID: 8300000, guid: 73db76ab2b8a34649ad8998dcdef7019, type: 3}
+      objectReference: {fileID: 8300000, guid: a684d428db9e77b49be7ac007da9b30d, type: 3}
     - target: {fileID: 114848120511536268, guid: 8814ea52310d2614a9feda02ec355ae4,
         type: 2}
       propertyPath: AudioClips.Array.data[15]
@@ -729,6 +729,11 @@ Prefab:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 114889259477145898, guid: ed008474ef4384d4b9a09908ff3e3727,
+        type: 2}
+      propertyPath: circleColours.Array.size
+      value: 6
+      objectReference: {fileID: 0}
     - target: {fileID: 4508598404147036, guid: ed008474ef4384d4b9a09908ff3e3727, type: 2}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -761,6 +766,21 @@ Prefab:
       propertyPath: m_RootOrder
       value: 3
       objectReference: {fileID: 0}
+    - target: {fileID: 114889259477145898, guid: ed008474ef4384d4b9a09908ff3e3727,
+        type: 2}
+      propertyPath: circleColours.Array.data[3]
+      value: 
+      objectReference: {fileID: 2100000, guid: 8ae5038c3cb07a84fa343f1e53a0c650, type: 2}
+    - target: {fileID: 114889259477145898, guid: ed008474ef4384d4b9a09908ff3e3727,
+        type: 2}
+      propertyPath: circleColours.Array.data[4]
+      value: 
+      objectReference: {fileID: 2100000, guid: 7a857b39e0d69394994a3fc2ad45bd3b, type: 2}
+    - target: {fileID: 114889259477145898, guid: ed008474ef4384d4b9a09908ff3e3727,
+        type: 2}
+      propertyPath: circleColours.Array.data[5]
+      value: 
+      objectReference: {fileID: 2100000, guid: 4659d4f547d3d4bd8bc0f31048ceb950, type: 2}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: ed008474ef4384d4b9a09908ff3e3727, type: 2}
   m_IsPrefabParent: 0

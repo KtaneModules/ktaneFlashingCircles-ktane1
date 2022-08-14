@@ -32,6 +32,7 @@ public class flashingCircleScript : MonoBehaviour
         new float[10] { 59/60f, 59/60f, 59/60f, 59/60f, 59/60f, 59/60f, 59/60f, 118/60f, 118/60f, 59/60f },
         new float[10] { 60/60f, 60 / 60f, 60 / 60f, 60 / 60f, 60 / 60f , 60 / 60f , 60 / 60f , 60 / 60f , 60 / 60f , 60 / 60f },
         new float[10] { 1/0.82f, 1/0.817f, 1/2.197f, 1/0.547f, 1/0.818f, 1/0.816f, 1/1.093f, 1/1.09f, 1/0.506f, 1/1.09f },
+        new float[10] { 1/1.394f, 1/1.065f, 1/1.592f, 1/1.606f, 1/1.408f, 1/1.066f, 1/1.058f, 1/1.063f, 1/1.046f, 1/1f }, 
     };
     private int selectedMusic;
 
@@ -58,7 +59,7 @@ public class flashingCircleScript : MonoBehaviour
     void Start()
     {
         HashSet<int> numbers = new HashSet<int>();
-        while (numbers.Count < 2) { numbers.Add(UnityEngine.Random.Range(0, 36)); }
+        while (numbers.Count < 2) { numbers.Add(UnityEngine.Random.Range(0, 36)); }//Selecting correct circle pair
         int k = 0;
         foreach (int i in numbers) { correctCircles[k] = i; k++; }
         Array.Sort(correctCircles);
@@ -69,7 +70,7 @@ public class flashingCircleScript : MonoBehaviour
             sb.Remove(0, sb.Length);
             for (int i = 0; i < 10; i++)
             {
-                int rnd = UnityEngine.Random.Range(0, 3);
+                int rnd = UnityEngine.Random.Range(0, circleColours.Length);
                 switch (rnd)
                 {
                     case 0:
@@ -80,6 +81,15 @@ public class flashingCircleScript : MonoBehaviour
                         break;
                     case 2:
                         sb.Append("B");
+                        break;
+                    case 3:
+                        sb.Append("C");
+                        break;
+                    case 4:
+                        sb.Append("M");
+                        break;
+                    case 5:
+                        sb.Append("Y");
                         break;
                 }
             }
@@ -118,10 +128,10 @@ public class flashingCircleScript : MonoBehaviour
 
     void colourFlash()
     {
-        /*selectedMusic = 5;//Testing solve animation
+        /*selectedMusic = 6;//Testing solve animation
         module.HandlePass();
         moduleSolved = true;
-        Debug.LogFormat("[Flashing Circles #{0}]: The correct pairs have been selected, module solved!", moduleId);
+        Debug.LogFormat("[Flashing Circles #{0}]: Beta-solving! Displaying animation!", moduleId);
         foreach (GameObject m in circles)
         {
             m.GetComponent<MeshRenderer>().material = borderColours[0];
@@ -139,7 +149,7 @@ public class flashingCircleScript : MonoBehaviour
         }
         Debug.LogFormat("<Flashing Circles #{0}>: Start button pressed, displaying colours...", moduleId);
 
-        selectedMusic = UnityEngine.Random.Range(0, 6);
+        selectedMusic = UnityEngine.Random.Range(0, 7);
         audio.PlaySoundAtTransform("Track " + (selectedMusic+1).ToString(), transform);
 
         foreach (GameObject m in circles)
@@ -221,6 +231,18 @@ public class flashingCircleScript : MonoBehaviour
                     k.GetComponent<MeshRenderer>().material = circleColours[2];
                     colour = Color.blue;
                     break;
+                case 'C':
+                    k.GetComponent<MeshRenderer>().material = circleColours[3];
+                    colour = Color.cyan;
+                    break;
+                case 'M':
+                    k.GetComponent<MeshRenderer>().material = circleColours[4];
+                    colour = Color.magenta;
+                    break;
+                case 'Y':
+                    k.GetComponent<MeshRenderer>().material = circleColours[5];
+                    colour = Color.yellow;
+                    break;
                 default:
                     colour = Color.white;
                     break;
@@ -240,7 +262,7 @@ public class flashingCircleScript : MonoBehaviour
         }
     }
     //Solve animations
-    private float[][] solveSpeed = new float[][]
+    private float[][] solveSpeed = new float[][]//Note to self, time period in seconds per beat = BPM / 60
     {
         new float[]{ 1f/0.3185f, 1f/0.318f, 1f/0.318f, 1f/0.318f, 95f/60f, 95f / 60f, 95f / 60f, 95f / 60f, 95f / 60f, 95f / 60f, 95f / 60f, 95f / 60f, 95f / 60f, 95f / 60f, 1f/0.878f},
         new float[]{ 1f/0.272f, 1f/0.17f, 1f/0.427f, 1f/1.23f, 97f*2/60f, 97f * 2 / 60f , 97f * 2 / 60f , 97f * 2 / 60f, 97f * 2 / 60f, 97f * 2 / 60f, 97f * 2 / 60f, 97f * 2 / 60f, 97f * 2 / 60f, 97f * 2 / 60f - 0.2f, 1f /0.193f, 1f/0.446f, 1/1.113f },
@@ -248,6 +270,7 @@ public class flashingCircleScript : MonoBehaviour
         new float[]{ 1f/1.068f, 1/1f, 118 / 60f, 118 / 60f, 118 / 60f, 118 / 60f, 118 / 60f, 118 / 60f, 118 / 60f, 118 / 60f, 118 / 60f, 118 / 60f, 118 / 60f, 118 / 60f, 118 / 60f, 118 / 60f, 59 / 60f },
         new float[]{ 1/1.1f, 1/1.35f, 1/1.35f, 1/1.35f, 1/1.35f, 1/1.35f, 1/1.35f, 1/2f },
         new float[]{ 1/0.5f, 220/60f, 220 / 60f, 220 / 60f, 1/0.821f, 1/0.813f, 1/1.487f, 1/0.417f, 220 / 60f, 220 / 60f, 220 / 60f, 1/0.83f, 1/0.817f, 1/0.813f, 1 /1.6f},
+        new float[]{ 85/60f, 85/60f, 85/60f, 85/60f, 85/60f, 85/60f, 85/60f, 85/60f, 85/60f, 85/60f, 85/60f, 85/60f, 85/60f, 1/0.345f, 1 / 0.345f, 1 / 0.345f, 2 / 0.345f, 1 / 0.345f, 85/15f, 85/30f, 85/30f, 85/30f, 85/120f},
     };
 
     private float[][] firstTrackPattern = new float[][]
@@ -575,6 +598,68 @@ public class flashingCircleScript : MonoBehaviour
                 }
                 break;
 
+            case 6:
+                for (int i = 0; i < solveSpeed[k].Length; i++)
+                {
+                    var flash = new List<Color>() { Color.red, Color.blue, Color.green, Color.yellow, Color.cyan, Color.magenta };
+                    Color rndFlash = flash[UnityEngine.Random.Range(0, flash.Count())];
+                    delta = 0f;
+                    while (delta < 1f)
+                    {
+                        delta += Time.deltaTime * solveSpeed[k][i];
+                        for (int j = 0; j < circles.Length; j++)
+                        {
+                            switch (i)
+                            {
+                                case 0:
+                                    rnd = UnityEngine.Random.Range(0f, 0.2f);
+                                    c = new Color(rnd, rnd, rnd, 1f);
+                                    circles[j].transform.GetChild(0).gameObject.GetComponent<MeshRenderer>().material.color = Color.Lerp(Color.white - c, Color.black + c, delta);
+                                    break;
+                                default:
+                                    if (i > 12)
+                                    {
+
+                                        rnd = UnityEngine.Random.Range(-0.3f - (i - 13) * 0.05f, 0.3f + (i - 13) * 0.05f );
+                                        c = new Color(rnd, rnd, rnd, 1f);
+                                        if (firstTrackPattern[i - 13].Contains(j))
+                                            circles[j].transform.GetChild(0).gameObject.GetComponent<MeshRenderer>().material.color = Color.green + c;
+                                        else
+                                            circles[j].transform.GetChild(0).gameObject.GetComponent<MeshRenderer>().material.color = Color.black + c;
+                                    }
+                                    else
+                                    {
+                                        rnd = UnityEngine.Random.Range(-0.4f, 0.4f);
+                                        c = new Color(rnd, rnd, rnd, 1f);
+                                        if (i % 2 == 0)
+                                        {
+                                            if ((j / 6 % 2 == 0 && j % 6 % 2 == 0) || (j / 6 % 2 != 0 && j % 6 % 2 != 0))
+                                                circles[j].transform.GetChild(0).gameObject.GetComponent<MeshRenderer>().material.color = Color.Lerp(rndFlash, Color.black, delta) + c; 
+                                            else
+                                                circles[j].transform.GetChild(0).gameObject.GetComponent<MeshRenderer>().material.color = Color.black;
+                                        }
+                                        else
+                                        {
+                                            if ((j / 6 % 2 != 0 && j % 6 % 2 == 0) || (j / 6 % 2 == 0 && j % 6 % 2 != 0))
+                                                circles[j].transform.GetChild(0).gameObject.GetComponent<MeshRenderer>().material.color = Color.Lerp(rndFlash, Color.black, delta) + c; 
+                                            else
+                                                circles[j].transform.GetChild(0).gameObject.GetComponent<MeshRenderer>().material.color = Color.black;
+                                        }
+                                    }
+                                    break;
+                                case 22:
+                                    if (firstTrackPattern[10].Contains(j))
+                                        circles[j].transform.GetChild(0).gameObject.GetComponent<MeshRenderer>().material.color = Color.Lerp(Color.blue, Color.black, delta);
+                                    else
+                                        circles[j].transform.GetChild(0).gameObject.GetComponent<MeshRenderer>().material.color = Color.Lerp(new Color(0.7f, 0.7f, 0f, 1f), Color.black, delta);
+                                    break;
+                            }
+                        }
+                        yield return null;
+                    }
+                }
+                break;
+
             default:
                 yield return null;
                 break;
@@ -590,6 +675,7 @@ public class flashingCircleScript : MonoBehaviour
     {
         command = command.ToLowerInvariant().Trim();
         string[] parameters = command.Split(' ');
+        yield return null;
         if (Regex.IsMatch(command, @"^\s*start\s*$", RegexOptions.IgnoreCase | RegexOptions.CultureInvariant))
         {
             if (isAnimating) { yield return "sendtochat This command isn't processed because the module is currently jammin' (performing an animation) right now."; yield break; }
@@ -606,6 +692,7 @@ public class flashingCircleScript : MonoBehaviour
             {
                 if (n < 1 || n > 36) { yield return "sendtochat I'm sorry sweetie, but there's no such thing as Circle #" + n + " in the module! Mind try again?"; yield break; }
                 circles[n - 1].GetComponent<KMSelectable>().OnInteract();
+                yield return null;
             }
             else
             {
