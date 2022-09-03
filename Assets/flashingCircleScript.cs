@@ -32,7 +32,8 @@ public class flashingCircleScript : MonoBehaviour
         new float[10] { 59/60f, 59/60f, 59/60f, 59/60f, 59/60f, 59/60f, 59/60f, 118/60f, 118/60f, 59/60f },
         new float[10] { 60/60f, 60 / 60f, 60 / 60f, 60 / 60f, 60 / 60f , 60 / 60f , 60 / 60f , 60 / 60f , 60 / 60f , 60 / 60f },
         new float[10] { 1/0.82f, 1/0.817f, 1/2.197f, 1/0.547f, 1/0.818f, 1/0.816f, 1/1.093f, 1/1.09f, 1/0.506f, 1/1.09f },
-        new float[10] { 1/1.394f, 1/1.065f, 1/1.592f, 1/1.606f, 1/1.408f, 1/1.066f, 1/1.058f, 1/1.063f, 1/1.046f, 1/1f }, 
+        new float[10] { 1/1.394f, 1/1.065f, 1/1.592f, 1/1.606f, 1/1.408f, 1/1.066f, 1/1.058f, 1/1.063f, 1/1.046f, 1/1f },
+        new float[10] { 1/0.472f, 1/0.818f, 1/1.057f, 1/1.398f, 1/0.472f, 1/0.818f, 1/1.039f, 1/0.94f, 1/0.462f, 1/0.469f },
     };
     private int selectedMusic;
 
@@ -128,7 +129,7 @@ public class flashingCircleScript : MonoBehaviour
 
     void colourFlash()
     {
-        /*selectedMusic = 6;//Testing solve animation
+        /*selectedMusic = 7;//Testing solve animation
         module.HandlePass();
         moduleSolved = true;
         Debug.LogFormat("[Flashing Circles #{0}]: Beta-solving! Displaying animation!", moduleId);
@@ -149,7 +150,7 @@ public class flashingCircleScript : MonoBehaviour
         }
         Debug.LogFormat("<Flashing Circles #{0}>: Start button pressed, displaying colours...", moduleId);
 
-        selectedMusic = UnityEngine.Random.Range(0, 7);
+        selectedMusic = UnityEngine.Random.Range(0, 8);
         audio.PlaySoundAtTransform("Track " + (selectedMusic+1).ToString(), transform);
 
         foreach (GameObject m in circles)
@@ -266,11 +267,12 @@ public class flashingCircleScript : MonoBehaviour
     {
         new float[]{ 1f/0.3185f, 1f/0.318f, 1f/0.318f, 1f/0.318f, 95f/60f, 95f / 60f, 95f / 60f, 95f / 60f, 95f / 60f, 95f / 60f, 95f / 60f, 95f / 60f, 95f / 60f, 95f / 60f, 1f/0.878f},
         new float[]{ 1f/0.272f, 1f/0.17f, 1f/0.427f, 1f/1.23f, 97f*2/60f, 97f * 2 / 60f , 97f * 2 / 60f , 97f * 2 / 60f, 97f * 2 / 60f, 97f * 2 / 60f, 97f * 2 / 60f, 97f * 2 / 60f, 97f * 2 / 60f, 97f * 2 / 60f - 0.2f, 1f /0.193f, 1f/0.446f, 1/1.113f },
-        new float[]{ 1f/1.152f, 1/0.91f, 1/0.878f, 1/0.898f, 1/0.914f, 1/0.884f, 1/0.889f, 1/0.921f, 1/0.83f}, 
+        new float[]{ 1f/1.152f, 1/0.91f, 1/0.878f, 1/0.898f, 1/0.914f, 1/0.884f, 1/0.889f, 1/0.921f, 1/0.83f},
         new float[]{ 1f/1.068f, 1/1f, 118 / 60f, 118 / 60f, 118 / 60f, 118 / 60f, 118 / 60f, 118 / 60f, 118 / 60f, 118 / 60f, 118 / 60f, 118 / 60f, 118 / 60f, 118 / 60f, 118 / 60f, 118 / 60f, 59 / 60f },
         new float[]{ 1/1.1f, 1/1.35f, 1/1.35f, 1/1.35f, 1/1.35f, 1/1.35f, 1/1.35f, 1/2f },
         new float[]{ 1/0.5f, 220/60f, 220 / 60f, 220 / 60f, 1/0.821f, 1/0.813f, 1/1.487f, 1/0.417f, 220 / 60f, 220 / 60f, 220 / 60f, 1/0.83f, 1/0.817f, 1/0.813f, 1 /1.6f},
         new float[]{ 85/60f, 85/60f, 85/60f, 85/60f, 85/60f, 85/60f, 85/60f, 85/60f, 85/60f, 85/60f, 85/60f, 85/60f, 85/60f, 1/0.345f, 1 / 0.345f, 1 / 0.345f, 2 / 0.345f, 1 / 0.345f, 85/15f, 85/30f, 85/30f, 85/30f, 85/120f},
+        new float[]{ 1/0.5f, 128/60f, 128 / 60f, 128 / 60f, 128/30f, 128/30f, 128/30f, 128/30f, 128/120f, 1/0.477f, 1/0.12f, 1/0.232f, 1/0.465f, 1/0.354f, 1/0.65f, 1/0.12f, 1/0.117f, 1/1.165f, 1/0.473f, 1/0.12f, 1/0.232f, 1/0.465f, 1/0.354f, 1/0.709f},
     };
 
     private float[][] firstTrackPattern = new float[][]
@@ -286,6 +288,8 @@ public class flashingCircleScript : MonoBehaviour
         new float[]{0, 1, 2, 3, 4, 6, 11, 12, 17, 18, 23, 24, 29, 30, 31, 32, 33, 34}, //D
         new float[]{0, 1, 2, 3, 4, 6, 11, 12, 17, 18, 23, 24, 29, 30, 31, 32, 33, 34}, //D
         new float[]{0, 5, 6, 11, 12, 17, 19, 20, 21, 22, 25, 28, 32, 33}, //Axo logo
+        new float[]{0, 1, 2, 3, 4, 5, 6, 12, 18, 21, 22, 23, 24, 29, 30, 31, 32, 33, 34, 35}, //G
+        new float[]{5, 11, 17, 23, 24, 29, 31, 32, 33, 34}, //J
     };
 
     IEnumerator solveAnim(int k)
@@ -336,7 +340,7 @@ public class flashingCircleScript : MonoBehaviour
                                     if (firstTrackPattern[i - 4].Contains(j))
                                         circles[j].transform.GetChild(0).gameObject.GetComponent<MeshRenderer>().material.color = Color.Lerp(Color.blue, Color.black, delta);
                                     else
-                                        circles[j].transform.GetChild(0).gameObject.GetComponent<MeshRenderer>().material.color = Color.Lerp(new Color(0.7f, 0.7f, 0f, 1f), Color.black, delta);
+                                        circles[j].transform.GetChild(0).gameObject.GetComponent<MeshRenderer>().material.color = Color.Lerp(new Color(255 / 256f, 215 / 256f, 0 / 256f, 1f), Color.black, delta);
                                     break;
                             }
                         }
@@ -408,7 +412,7 @@ public class flashingCircleScript : MonoBehaviour
                                     if (firstTrackPattern[10].Contains(j))
                                         circles[j].transform.GetChild(0).gameObject.GetComponent<MeshRenderer>().material.color = Color.Lerp(Color.blue, Color.black, delta);
                                     else
-                                        circles[j].transform.GetChild(0).gameObject.GetComponent<MeshRenderer>().material.color = Color.Lerp(new Color(0.7f, 0.7f, 0f, 1f), Color.black, delta);
+                                        circles[j].transform.GetChild(0).gameObject.GetComponent<MeshRenderer>().material.color = Color.Lerp(new Color(255 / 256f, 215 / 256f, 0 / 256f, 1f), Color.black, delta);
                                     break;
                             }
                         }
@@ -446,7 +450,7 @@ public class flashingCircleScript : MonoBehaviour
                                     if (firstTrackPattern[10].Contains(j))
                                         circles[j].transform.GetChild(0).gameObject.GetComponent<MeshRenderer>().material.color = Color.Lerp(Color.blue, Color.black, delta);
                                     else
-                                        circles[j].transform.GetChild(0).gameObject.GetComponent<MeshRenderer>().material.color = Color.Lerp(new Color(0.7f, 0.7f, 0f, 1f), Color.black, delta);
+                                        circles[j].transform.GetChild(0).gameObject.GetComponent<MeshRenderer>().material.color = Color.Lerp(new Color(255 / 256f, 215 / 256f, 0 / 256f, 1f), Color.black, delta);
                                     break;
                             }
                         }
@@ -495,7 +499,7 @@ public class flashingCircleScript : MonoBehaviour
                                     if (firstTrackPattern[10].Contains(j))
                                         circles[j].transform.GetChild(0).gameObject.GetComponent<MeshRenderer>().material.color = Color.Lerp(Color.blue, Color.black, delta);
                                     else
-                                        circles[j].transform.GetChild(0).gameObject.GetComponent<MeshRenderer>().material.color = Color.Lerp(new Color(0.7f, 0.7f, 0f, 1f), Color.black, delta);
+                                        circles[j].transform.GetChild(0).gameObject.GetComponent<MeshRenderer>().material.color = Color.Lerp(new Color(255 / 256f, 215 / 256f, 0 / 256f, 1f), Color.black, delta);
                                     break;
                             }
                         }
@@ -532,7 +536,7 @@ public class flashingCircleScript : MonoBehaviour
                                     if (firstTrackPattern[10].Contains(j))
                                         circles[j].transform.GetChild(0).gameObject.GetComponent<MeshRenderer>().material.color = Color.Lerp(Color.blue - c, Color.black, delta);
                                     else
-                                        circles[j].transform.GetChild(0).gameObject.GetComponent<MeshRenderer>().material.color = Color.Lerp(new Color(0.7f, 0.7f, 0f, 1f) - c, Color.black, delta);
+                                        circles[j].transform.GetChild(0).gameObject.GetComponent<MeshRenderer>().material.color = Color.Lerp(new Color(255 / 256f, 215 / 256f, 0 / 256f, 1f), Color.black, delta);
                                     break;
                             }
                         }
@@ -579,7 +583,7 @@ public class flashingCircleScript : MonoBehaviour
                                     circles[j].transform.GetChild(0).gameObject.GetComponent<MeshRenderer>().material.color = Color.Lerp(Color.white - c, Color.black + c, delta);
                                     break;
                                 case 9:
-                                    circles[j].transform.GetChild(0).gameObject.GetComponent<MeshRenderer>().material.color = Color.Lerp(new Color(0.7f, 0.7f, 0f, 1f), Color.black + c, delta);
+                                    circles[j].transform.GetChild(0).gameObject.GetComponent<MeshRenderer>().material.color = Color.Lerp(new Color(255 / 256f, 215 / 256f, 0 / 256f, 1f), Color.black, delta);
                                     break;
                                 case 10:
                                     if (firstTrackPattern[10].Contains(j))
@@ -589,7 +593,7 @@ public class flashingCircleScript : MonoBehaviour
                                     if (firstTrackPattern[10].Contains(j))
                                         circles[j].transform.GetChild(0).gameObject.GetComponent<MeshRenderer>().material.color = Color.Lerp(Color.blue - c, Color.black, delta);
                                     else
-                                        circles[j].transform.GetChild(0).gameObject.GetComponent<MeshRenderer>().material.color = Color.Lerp(new Color(0.7f, 0.7f, 0f, 1f) - c, Color.black, delta);
+                                        circles[j].transform.GetChild(0).gameObject.GetComponent<MeshRenderer>().material.color = Color.Lerp(new Color(255 / 256f, 215 / 256f, 0 / 256f, 1f), Color.black, delta);
                                     break;
                             }
                         }
@@ -620,7 +624,7 @@ public class flashingCircleScript : MonoBehaviour
                                     if (i > 12)
                                     {
 
-                                        rnd = UnityEngine.Random.Range(-0.3f - (i - 13) * 0.05f, 0.3f + (i - 13) * 0.05f );
+                                        rnd = UnityEngine.Random.Range(-0.3f - (i - 13) * 0.05f, 0.3f + (i - 13) * 0.05f );//Making the glitches more apparent over time
                                         c = new Color(rnd, rnd, rnd, 1f);
                                         if (firstTrackPattern[i - 13].Contains(j))
                                             circles[j].transform.GetChild(0).gameObject.GetComponent<MeshRenderer>().material.color = Color.green + c;
@@ -651,7 +655,102 @@ public class flashingCircleScript : MonoBehaviour
                                     if (firstTrackPattern[10].Contains(j))
                                         circles[j].transform.GetChild(0).gameObject.GetComponent<MeshRenderer>().material.color = Color.Lerp(Color.blue, Color.black, delta);
                                     else
-                                        circles[j].transform.GetChild(0).gameObject.GetComponent<MeshRenderer>().material.color = Color.Lerp(new Color(0.7f, 0.7f, 0f, 1f), Color.black, delta);
+                                        circles[j].transform.GetChild(0).gameObject.GetComponent<MeshRenderer>().material.color = Color.Lerp(new Color(255 / 256f, 215 / 256f, 0 / 256f, 1f), Color.black, delta);
+                                    break;
+                            }
+                        }
+                        yield return null;
+                    }
+                }
+                break;
+
+            case 7:
+                for (int i = 0; i < solveSpeed[k].Length; i++)
+                {
+                    delta = 0f;
+                    while (delta < 1f)
+                    {
+                        delta += Time.deltaTime * solveSpeed[k][i];
+                        for (int j = 0; j < circles.Length; j++)
+                        {
+                            switch (i)
+                            {
+                                case 0:
+                                    circles[j].transform.GetChild(0).gameObject.GetComponent<MeshRenderer>().material.color = Color.Lerp(Color.white, Color.black, delta);
+                                    break;
+
+                                case 1:
+                                case 2:
+                                case 3:
+                                    circles[j].transform.GetChild(0).gameObject.GetComponent<MeshRenderer>().material.color = Color.Lerp(Color.green, Color.black, delta);
+                                    break;
+
+                                case 4:
+                                case 5:
+                                case 6:
+                                case 7:
+                                    circles[j].transform.GetChild(0).gameObject.GetComponent<MeshRenderer>().material.color = Color.Lerp(Color.green, Color.gray, delta);
+                                    break;
+
+                                case 8:
+                                    rnd = UnityEngine.Random.Range(-1.0f, 1.0f);
+                                    c = new Color(rnd, rnd, rnd, 1f);
+                                    circles[j].transform.GetChild(0).gameObject.GetComponent<MeshRenderer>().material.color = Color.Lerp(Color.green - c, Color.black, delta);
+                                    break;
+                                default:
+                                    circles[j].transform.GetChild(0).gameObject.GetComponent<MeshRenderer>().material.color = Color.Lerp(Color.white, Color.black, delta);
+                                    break;
+                                case 10:
+                                case 11:
+                                case 12:
+                                    if (j / 12 == i - 10)
+                                    {
+                                        circles[j].transform.GetChild(0).gameObject.GetComponent<MeshRenderer>().material.color = Color.Lerp(Color.blue, Color.black, delta);
+                                    }
+                                    else
+                                    {
+                                        circles[j].transform.GetChild(0).gameObject.GetComponent<MeshRenderer>().material.color = Color.Lerp(Color.black, Color.black, delta);
+                                    }
+                                    break;
+                                case 13:
+                                case 14:
+                                    if (firstTrackPattern[i - 2].Contains(j))
+                                        circles[j].transform.GetChild(0).gameObject.GetComponent<MeshRenderer>().material.color = Color.Lerp(new Color(80 / 256f, 200 / 256f, 120 / 256f, 1f), Color.black, delta);
+                                    else
+                                        circles[j].transform.GetChild(0).gameObject.GetComponent<MeshRenderer>().material.color = Color.Lerp(new Color(34 / 256f, 139 / 256f, 34 / 256f, 1f), Color.black, delta);
+                                    break;
+                                case 15:
+                                case 16:
+                                case 17:
+                                    if (j / 12 == 17 - i)
+                                    {
+                                        circles[j].transform.GetChild(0).gameObject.GetComponent<MeshRenderer>().material.color = Color.Lerp(Color.green, Color.black, delta);
+                                    }
+                                    else
+                                    {
+                                        circles[j].transform.GetChild(0).gameObject.GetComponent<MeshRenderer>().material.color = Color.Lerp(Color.black, Color.black, delta);
+                                    }
+                                    break;
+                                case 19:
+                                case 20:
+                                case 21:
+                                    if ((j % 6) / 2 == i - 19)
+                                    {
+                                        circles[j].transform.GetChild(0).gameObject.GetComponent<MeshRenderer>().material.color = Color.Lerp(Color.yellow, Color.black, delta);
+                                    }
+                                    else
+                                    {
+                                        circles[j].transform.GetChild(0).gameObject.GetComponent<MeshRenderer>().material.color = Color.Lerp(Color.black, Color.black, delta);
+                                    }
+                                    break;
+                                case 22:
+                                    circles[j].transform.GetChild(0).gameObject.GetComponent<MeshRenderer>().material.color = Color.Lerp(new Color(255 / 256f, 215 / 256f, 0 / 256f, 1f), Color.black, delta);
+                                    break;
+                                case 23:
+                                    if (firstTrackPattern[10].Contains(j))
+                                        circles[j].transform.GetChild(0).gameObject.GetComponent<MeshRenderer>().material.color = Color.Lerp(Color.blue, Color.black, delta);
+                                    else
+                                        circles[j].transform.GetChild(0).gameObject.GetComponent<MeshRenderer>().material.color = Color.Lerp(new Color(255 / 256f, 215 / 256f, 0 / 256f, 1f), Color.black, delta);
                                     break;
                             }
                         }
