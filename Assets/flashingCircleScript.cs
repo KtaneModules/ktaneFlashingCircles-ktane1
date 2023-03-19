@@ -14,12 +14,12 @@ public class flashingCircleScript : MonoBehaviour
 	public KMBombModule module;
 
     public GameObject[] circles;
-    public KMSelectable startButton;
+    public KMSelectable[] startButton;
     public Material[] circleColours;
     public Material[] borderColours;
 
-    private string[] colourSequence = new string[36];
-    private int[] correctCircles = new int[2];
+    private string[][] colourSequence = new string[][] { new string[36], new string[36] };
+    private int[][] correctCircles = new int[][] {new int[2], new int[2] };
     private int[] circleStatus = new int[36];
     private bool[] correct = new bool[2];
     private bool isAnimating, activated;
@@ -35,7 +35,9 @@ public class flashingCircleScript : MonoBehaviour
         new float[10] { 1/1.394f, 1/1.065f, 1/1.592f, 1/1.606f, 1/1.408f, 1/1.066f, 1/1.058f, 1/1.063f, 1/1.046f, 1/1f },
         new float[10] { 1/0.472f, 1/0.818f, 1/1.057f, 1/1.398f, 1/0.472f, 1/0.818f, 1/1.039f, 1/0.94f, 1/0.462f, 1/0.469f },
     };
-    private int selectedMusic;
+    private int[] middleGrid = new int[16] { 7, 8, 9, 10, 13, 14, 15, 16, 19, 20, 21, 22, 25, 26, 27, 28 };
+    private int selectedMusic, state;
+    private bool selectedState;
 
     private static int moduleIdCounter = 1;
     private int moduleId;
@@ -45,11 +47,13 @@ public class flashingCircleScript : MonoBehaviour
     {
     	moduleId = moduleIdCounter++;
 
-        startButton.OnInteract += delegate {
-            colourFlash();
-            startButton.AddInteractionPunch(0.25f);
-            return false;
-        };
+        for (int i = 0; i < startButton.Length; i++)
+        {
+            int j = i;
+            startButton[j].OnInteract += () => { colourFlash(j); return false; };
+            startButton[j].AddInteractionPunch(0.25f);
+        }
+
         for (int i = 0; i < circles.Length; i++)
         {
             int j = i;
@@ -59,75 +63,160 @@ public class flashingCircleScript : MonoBehaviour
 
     void Start()
     {
-        HashSet<int> numbers = new HashSet<int>();
-        while (numbers.Count < 2) { numbers.Add(UnityEngine.Random.Range(0, 36)); }//Selecting correct circle pair
-        int k = 0;
-        foreach (int i in numbers) { correctCircles[k] = i; k++; }
-        Array.Sort(correctCircles);
-        HashSet<string> colors = new HashSet<string>();
-        StringBuilder sb = new StringBuilder();
-        while (colors.Count < 35)
+        for (int s = 0; s < 2; s++)
         {
-            sb.Remove(0, sb.Length);
-            for (int i = 0; i < 10; i++)
+            HashSet<int> numbers = new HashSet<int>();
+            while (numbers.Count < 2) //Selecting correct circle pair
+            { 
+                if (s == 0) { numbers.Add(UnityEngine.Random.Range(0, 36)); } 
+                else { numbers.Add(UnityEngine.Random.Range(0, 16)); } 
+            }
+            int k = 0;
+            foreach (int i in numbers) { correctCircles[s][k] = i; k++; }//Placing correct circles to the array
+            Array.Sort(correctCircles[s]);
+            HashSet<string> colors = new HashSet<string>();
+            StringBuilder sb = new StringBuilder();
+            int rnd = 0;
+            if (s == 0)
             {
-                int rnd = UnityEngine.Random.Range(0, circleColours.Length);
-                switch (rnd)
+                while (colors.Count < 35)
                 {
-                    case 0:
-                        sb.Append("R");
-                        break;
-                    case 1:
-                        sb.Append("G");
-                        break;
-                    case 2:
-                        sb.Append("B");
-                        break;
-                    case 3:
-                        sb.Append("C");
-                        break;
-                    case 4:
-                        sb.Append("M");
-                        break;
-                    case 5:
-                        sb.Append("Y");
-                        break;
+                    sb.Remove(0, sb.Length);
+                    for (int i = 0; i < 10; i++)
+                    {
+                        rnd = UnityEngine.Random.Range(0, circleColours.Length);
+                        switch (rnd)
+                        {
+                            case 0:
+                                sb.Append("R");
+                                break;
+                            case 1:
+                                sb.Append("G");
+                                break;
+                            case 2:
+                                sb.Append("B");
+                                break;
+                            case 3:
+                                sb.Append("C");
+                                break;
+                            case 4:
+                                sb.Append("M");
+                                break;
+                            case 5:
+                                sb.Append("Y");
+                                break;
+                        }
+                    }
+                    colors.Add(sb.ToString());
                 }
             }
-            colors.Add(sb.ToString());
-        }
-        k = 0;
-        foreach (string i in colors)
-        {
-            if (k == correctCircles[1])
+            else
             {
-                colourSequence[k] = colourSequence[correctCircles[0]];
-                k++;
+                while (colors.Count < 15)
+                {
+                    sb.Remove(0, sb.Length);
+                    for (int i = 0; i < 10; i++)
+                    {
+                        rnd = UnityEngine.Random.Range(0, 3);
+                        switch (rnd)
+                        {
+                            case 0:
+                                sb.Append("R");
+                                break;
+                            case 1:
+                                sb.Append("G");
+                                break;
+                            case 2:
+                                sb.Append("B");
+                                break;
+                        }
+                    }
+                    colors.Add(sb.ToString());
+                }
             }
-            colourSequence[k] = i;
-            k++;
-        }
-        if (correctCircles[1] == 35) { colourSequence[35] = colourSequence[correctCircles[0]];}
-        sb.Remove(0, sb.Length);
-        Debug.LogFormat("[Flashing Circles #{0}]: The colour sequence for each circle is as follows:", moduleId);
-        for (int i = 0; i < 6; i++)
-        {
-            for (int j = 0; j < 6; j++)
+            k = 0;
+            var smallColSequence = new string[16];
+            foreach (string i in colors)
             {
-                sb.Append(colourSequence[i * 6 + j] + " ");
+                if (s == 0)
+                {
+                    if (k == correctCircles[s][1])
+                    {
+                        colourSequence[s][k] = colourSequence[s][correctCircles[s][0]];
+                        k++;
+                    }
+                    colourSequence[s][k] = i;
+                    k++;
+                }
+                else
+                {
+                    if (k == correctCircles[s][1])
+                    {
+                        smallColSequence[k] = smallColSequence[correctCircles[s][0]];
+                        k++;
+                    }
+                    smallColSequence[k] = i;
+                    k++;
+                }
             }
-            Debug.LogFormat("[Flashing Circles #{0}]: {1}", moduleId, sb.ToString());
+            if (s == 0 && correctCircles[s][1] == 35) { colourSequence[s][35] = colourSequence[s][correctCircles[s][0]]; }
+            if (s == 1 && correctCircles[s][1] == 15) { smallColSequence[15] = smallColSequence[correctCircles[s][0]]; }
+
+            k = 0;
+            if (s == 1)
+            {
+                for (int l = 0; l < colourSequence[s].Length; l++)
+                {
+                    if (Array.Exists(middleGrid, element => element == l))
+                    {
+                        colourSequence[s][l] = smallColSequence[k];
+                        k++;
+                    }
+                    else
+                    {
+                        colourSequence[s][l] = "KKKKKKKKKK";
+                    }
+                }
+            }
+
             sb.Remove(0, sb.Length);
+            if (s == 0)
+            {
+                Debug.LogFormat("[Flashing Circles #{0}]: For the red button, the colour sequence for each circle is as follows:", moduleId);
+                for (int i = 0; i < 6; i++)
+                {
+                    for (int j = 0; j < 6; j++)
+                    {
+                        sb.Append(colourSequence[s][i * 6 + j] + " ");
+                    }
+                    Debug.LogFormat("[Flashing Circles #{0}]: {1}", moduleId, sb.ToString());
+                    sb.Remove(0, sb.Length);
+                }
+            }
+            else
+            {
+                Debug.LogFormat("[Flashing Circles #{0}]: For the blue button, the colour sequence for each circle is as follows:", moduleId);
+                for (int i = 0; i < 4; i++)
+                {
+                    for (int j = 0; j < 4; j++)
+                    {
+                        sb.Append(smallColSequence[i * 4 + j] + " ");
+                    }
+                    Debug.LogFormat("[Flashing Circles #{0}]: {1}", moduleId, sb.ToString());
+                    sb.Remove(0, sb.Length);
+                }
+            }
+            Debug.LogFormat("[Flashing Circles #{0}]: The correct circles selected are #{1} and #{2}, in reading order.", moduleId, correctCircles[s][0] + 1, correctCircles[s][1] + 1);
+            for (int i = 0; i < circleStatus.Length; i++)
+            {
+                circleStatus[i] = 0;
+            }
         }
-        Debug.LogFormat("[Flashing Circles #{0}]: The correct circles selected are #{1} and #{2}, in reading order.", moduleId, correctCircles[0] + 1, correctCircles[1] + 1);
-        for (int i = 0; i < circleStatus.Length; i++)
-        {
-            circleStatus[i] = 0;
-        }
+        
 
     }
 
-    void colourFlash()
+    void colourFlash(int a)
     {
         /*selectedMusic = 7;//Testing solve animation
         module.HandlePass();
@@ -142,13 +231,20 @@ public class flashingCircleScript : MonoBehaviour
         return;*/
 
         if (isAnimating || moduleSolved) { return; }
+        if (!selectedState) { state = a; } 
+        else if (state != a)
+        {
+            Debug.LogFormat("[Flashing Circles #{0}]: A circle has already been selected, so this start button does not work.", moduleId);
+            return;
+
+        }
         int k = 0;
         activated = true;
         foreach (GameObject i in circles)
         {
             i.GetComponent<MeshRenderer>().material = borderColours[0];
         }
-        Debug.LogFormat("<Flashing Circles #{0}>: Start button pressed, displaying colours...", moduleId);
+        Debug.LogFormat("<Flashing Circles #{0}>: Start button #{1} pressed, displaying colours...", moduleId, state);
 
         selectedMusic = UnityEngine.Random.Range(0, 8);
         audio.PlaySoundAtTransform("Track " + (selectedMusic+1).ToString(), transform);
@@ -165,18 +261,23 @@ public class flashingCircleScript : MonoBehaviour
         if (isAnimating || !activated) { return; }
         if (!moduleSolved)
         {
+            if (state == 1 && !Array.Exists(middleGrid, element => element == k)) { return; }
             audio.PlaySoundAtTransform("Select", transform);
+            selectedState = true;
             for (int i = 0; i < 2; i++)
             {
-                if (k == correctCircles[i])
+                if ((state == 0 && k == correctCircles[state][i]) || (state == 1 && k == middleGrid[correctCircles[state][i]]))
                 {
                     correct[i] = true;
                     circles[k].GetComponent<MeshRenderer>().material = borderColours[1];
                     circleStatus[k] = 1;
-                    Debug.LogFormat("[Flashing Circles #{0}]: Circle #{1} is selected, and it's correct.", moduleId, k + 1);
+                    if (state == 0)
+                        Debug.LogFormat("[Flashing Circles #{0}]: Circle #{1} is selected, and it's correct.", moduleId, k + 1);
+                    else
+                        Debug.LogFormat("[Flashing Circles #{0}]: Circle #{1} is selected, and it's correct.", moduleId, Array.FindIndex(middleGrid, element => element == k) + 1);
                     if (correct.All(x => x))
                     {
-                        module.HandlePass();
+                        if (bomb.GetTime() < 120) { module.HandlePass(); }
                         moduleSolved = true;
                         Debug.LogFormat("[Flashing Circles #{0}]: The correct pairs have been selected, module solved!", moduleId);
                         foreach (GameObject m in circles)
@@ -192,7 +293,10 @@ public class flashingCircleScript : MonoBehaviour
             module.HandleStrike();
             circles[k].GetComponent<MeshRenderer>().material = borderColours[2];
             circleStatus[k] = 2;
-            Debug.LogFormat("[Flashing Circles #{0}]: Circle #{1} is selected, but it's incorrect. Strike.", moduleId, k + 1);
+            if (state == 0)
+                Debug.LogFormat("[Flashing Circles #{0}]: Circle #{1} is selected, but it's incorrect. Strike.", moduleId, k + 1);
+            else
+                Debug.LogFormat("[Flashing Circles #{0}]: Circle #{1} is selected, but it's incorrect. Strike.", moduleId, Array.FindIndex(middleGrid, element => element == k) + 1);
         }
         else
         {
@@ -215,10 +319,10 @@ public class flashingCircleScript : MonoBehaviour
                 yield return null;
             }
         }
-        for (int i = 0; i < colourSequence[index].Length; i++)
+        for (int i = 0; i < colourSequence[state][index].Length; i++)
         {
             Color colour;
-            switch (colourSequence[index][i])
+            switch (colourSequence[state][index][i])
             {
                 case 'R':
                     k.GetComponent<MeshRenderer>().material = circleColours[0];
@@ -245,14 +349,21 @@ public class flashingCircleScript : MonoBehaviour
                     colour = Color.yellow;
                     break;
                 default:
-                    colour = Color.white;
+                    colour = Color.black;
                     break;
             }
             delta = 0f;
             while (delta < 1f)
             {
                 delta += Time.deltaTime * flashSpeed[selectedMusic][i];
-                k.GetComponent<MeshRenderer>().material.color = Color.Lerp(colour, Color.white, delta);
+                if (state == 1)
+                {
+                    k.GetComponent<MeshRenderer>().material.color = Color.Lerp(colour, Color.black, delta);
+                }
+                else
+                {
+                    k.GetComponent<MeshRenderer>().material.color = Color.Lerp(colour, Color.white, delta);
+                }
                 yield return null;
             }
         }
@@ -337,6 +448,7 @@ public class flashingCircleScript : MonoBehaviour
                                         circles[j].transform.GetChild(0).gameObject.GetComponent<MeshRenderer>().material.color = Color.Lerp(new Color(0f, 0.4f, 0f, 1f), Color.black, delta);
                                     break;
                                 case 14:
+                                    module.HandlePass();
                                     if (firstTrackPattern[i - 4].Contains(j))
                                         circles[j].transform.GetChild(0).gameObject.GetComponent<MeshRenderer>().material.color = Color.Lerp(Color.blue, Color.black, delta);
                                     else
@@ -409,6 +521,7 @@ public class flashingCircleScript : MonoBehaviour
                                     break;
 
                                 case 16:
+                                    module.HandlePass();
                                     if (firstTrackPattern[10].Contains(j))
                                         circles[j].transform.GetChild(0).gameObject.GetComponent<MeshRenderer>().material.color = Color.Lerp(Color.blue, Color.black, delta);
                                     else
@@ -447,6 +560,7 @@ public class flashingCircleScript : MonoBehaviour
                                     circles[j].transform.GetChild(0).gameObject.GetComponent<MeshRenderer>().material.color = Color.Lerp(Color.green, Color.black, delta);
                                     break;
                                 case 8:
+                                    module.HandlePass();
                                     if (firstTrackPattern[10].Contains(j))
                                         circles[j].transform.GetChild(0).gameObject.GetComponent<MeshRenderer>().material.color = Color.Lerp(Color.blue, Color.black, delta);
                                     else
@@ -496,6 +610,7 @@ public class flashingCircleScript : MonoBehaviour
                                         circles[j].transform.GetChild(0).gameObject.GetComponent<MeshRenderer>().material.color = Color.Lerp(Color.grey, Color.black, delta);
                                     break;
                                 case 16:
+                                    module.HandlePass();
                                     if (firstTrackPattern[10].Contains(j))
                                         circles[j].transform.GetChild(0).gameObject.GetComponent<MeshRenderer>().material.color = Color.Lerp(Color.blue, Color.black, delta);
                                     else
@@ -533,6 +648,7 @@ public class flashingCircleScript : MonoBehaviour
                                         circles[j].transform.GetChild(0).gameObject.GetComponent<MeshRenderer>().material.color = Color.Lerp(Color.grey - c, Color.black, delta);
                                     break;
                                 case 7:
+                                    module.HandlePass();
                                     if (firstTrackPattern[10].Contains(j))
                                         circles[j].transform.GetChild(0).gameObject.GetComponent<MeshRenderer>().material.color = Color.Lerp(Color.blue - c, Color.black, delta);
                                     else
@@ -590,6 +706,7 @@ public class flashingCircleScript : MonoBehaviour
                                         circles[j].transform.GetChild(0).gameObject.GetComponent<MeshRenderer>().material.color = Color.Lerp(Color.blue - c, Color.black + c, delta);
                                     break;
                                 case 14:
+                                    module.HandlePass();
                                     if (firstTrackPattern[10].Contains(j))
                                         circles[j].transform.GetChild(0).gameObject.GetComponent<MeshRenderer>().material.color = Color.Lerp(Color.blue - c, Color.black, delta);
                                     else
@@ -652,6 +769,7 @@ public class flashingCircleScript : MonoBehaviour
                                     }
                                     break;
                                 case 22:
+                                    module.HandlePass();
                                     if (firstTrackPattern[10].Contains(j))
                                         circles[j].transform.GetChild(0).gameObject.GetComponent<MeshRenderer>().material.color = Color.Lerp(Color.blue, Color.black, delta);
                                     else
@@ -747,6 +865,7 @@ public class flashingCircleScript : MonoBehaviour
                                     circles[j].transform.GetChild(0).gameObject.GetComponent<MeshRenderer>().material.color = Color.Lerp(new Color(255 / 256f, 215 / 256f, 0 / 256f, 1f), Color.black, delta);
                                     break;
                                 case 23:
+                                    module.HandlePass();
                                     if (firstTrackPattern[10].Contains(j))
                                         circles[j].transform.GetChild(0).gameObject.GetComponent<MeshRenderer>().material.color = Color.Lerp(Color.blue, Color.black, delta);
                                     else
@@ -778,7 +897,7 @@ public class flashingCircleScript : MonoBehaviour
         if (Regex.IsMatch(command, @"^\s*start\s*$", RegexOptions.IgnoreCase | RegexOptions.CultureInvariant))
         {
             if (isAnimating) { yield return "sendtochat This command isn't processed because the module is currently jammin' (performing an animation) right now."; yield break; }
-            startButton.OnInteract();
+            startButton[0].OnInteract();
         }
         else if (Regex.IsMatch(parameters[0], @"^\s*select\s*$", RegexOptions.IgnoreCase | RegexOptions.CultureInvariant))
         {
@@ -814,12 +933,20 @@ public class flashingCircleScript : MonoBehaviour
         while (!moduleSolved)
         {
             if (isAnimating) { yield return null; }
-            else if (!activated) { startButton.OnInteract(); yield return null; }
-            else
+            else if (!activated) { startButton[0].OnInteract(); yield return null; }
+            else if (state == 0)
             {
                 for (int i = 0; i < correctCircles.Length; i++)
                 {
-                    circles[correctCircles[i]].GetComponent<KMSelectable>().OnInteract();
+                    circles[correctCircles[0][i]].GetComponent<KMSelectable>().OnInteract();
+                    yield return null;
+                }
+            }
+            else if (state == 1)
+            {
+                for (int i = 0; i < correctCircles.Length; i++)
+                {
+                    circles[middleGrid[correctCircles[1][i]]].GetComponent<KMSelectable>().OnInteract();
                     yield return null;
                 }
             }
