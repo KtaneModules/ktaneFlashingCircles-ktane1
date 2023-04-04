@@ -886,7 +886,7 @@ public class flashingCircleScript : MonoBehaviour
 
     //Twitch plays
     #pragma warning disable 414
-    private readonly string TwitchHelpMessage = @"<!{0} select X#> to select a circle, where X is a letter denoting column and # is a number denoting row, <!{0} select #> to select the #th circle, starting from top left as 1, counted in reading order, <!{0} start> to press the start button, note that you can only select one circle at a time";
+    private readonly string TwitchHelpMessage = @"<!{0} select X#> to select a circle, where X is a letter denoting column and # is a number denoting row, <!{0} select #> to select the #th circle, starting from top left as 1, counted in reading order, <!{0} red> or <!{0} blue> to press either the red or blue button, note that you can only select one circle at a time";
     #pragma warning restore 414
 
     IEnumerator ProcessTwitchCommand(string command)
@@ -894,10 +894,15 @@ public class flashingCircleScript : MonoBehaviour
         command = command.ToLowerInvariant().Trim();
         string[] parameters = command.Split(' ');
         yield return null;
-        if (Regex.IsMatch(command, @"^\s*start\s*$", RegexOptions.IgnoreCase | RegexOptions.CultureInvariant))
+        if (Regex.IsMatch(command, @"^\s*red\s*$", RegexOptions.IgnoreCase | RegexOptions.CultureInvariant))
         {
             if (isAnimating) { yield return "sendtochat This command isn't processed because the module is currently jammin' (performing an animation) right now."; yield break; }
             startButton[0].OnInteract();
+        }
+        else if (Regex.IsMatch(command, @"^\s*blue\s*$", RegexOptions.IgnoreCase | RegexOptions.CultureInvariant))
+        {
+            if (isAnimating) { yield return "sendtochat This command isn't processed because the module is currently jammin' (performing an animation) right now."; yield break; }
+            startButton[1].OnInteract();
         }
         else if (Regex.IsMatch(parameters[0], @"^\s*select\s*$", RegexOptions.IgnoreCase | RegexOptions.CultureInvariant))
         {
@@ -919,6 +924,11 @@ public class flashingCircleScript : MonoBehaviour
                     yield return "sendtochat I'm sorry sweetie, but I have no idea what you're trying to select! Mind try again?"; yield break;
                 }
                 circles["abcdef".IndexOf(parameters[1][0]) + "123456".IndexOf(parameters[1][1])*6].GetComponent<KMSelectable>().OnInteract();
+                if (moduleSolved && state == 1)
+                {
+                    int TPScore = -3;
+                    yield return "awardpointsonsolve " + TPScore;
+                }
             }
         }
         else
